@@ -1,0 +1,104 @@
+{
+  "info": {
+    "name": "GitHub Profile Analyzer API",
+    "description": "Collection for testing the GitHub Profile Analyzer backend service.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "username",
+      "value": "octocat",
+      "type": "string"
+    },
+    {
+      "key": "apiKey",
+      "value": "your-api-key-here",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health"
+      }
+    },
+    {
+      "name": "API Root / Info",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/"
+      }
+    },
+    {
+      "name": "Analyze & Store Profile",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "x-api-key", "value": "{{apiKey}}" }
+        ],
+        "url": "{{baseUrl}}/api/profiles/{{username}}",
+        "description": "Fetches the user from GitHub, computes insights, and saves/updates it in MySQL. Requires x-api-key header."
+      }
+    },
+    {
+      "name": "List All Stored Profiles",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/profiles?page=1&limit=20&sortBy=analyzed_at&order=DESC",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "profiles"],
+          "query": [
+            { "key": "page", "value": "1" },
+            { "key": "limit", "value": "20" },
+            { "key": "sortBy", "value": "analyzed_at" },
+            { "key": "order", "value": "DESC" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Search Stored Profiles",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/profiles?search=oct",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "profiles"],
+          "query": [{ "key": "search", "value": "oct" }]
+        }
+      }
+    },
+    {
+      "name": "Get Single Stored Profile",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/profiles/{{username}}"
+      }
+    },
+    {
+      "name": "Get Profile Analysis History",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/profiles/{{username}}/history"
+      }
+    },
+    {
+      "name": "Delete Stored Profile",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "x-api-key", "value": "{{apiKey}}" }
+        ],
+        "url": "{{baseUrl}}/api/profiles/{{username}}"
+      }
+    }
+  ]
+}
